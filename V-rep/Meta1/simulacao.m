@@ -20,10 +20,10 @@ clientID=vrep.simxStart('127.0.0.1',19999,true,true,5000,5);
      %Leitura sensor
      [returnCode,detectionState,detectedPoint,~,~]=vrep.simxReadProximitySensor(clientID,front_Sensor,vrep.simx_opmode_streaming);
      [returnCode,position]=vrep.simxGetObjectPosition(clientID,carro,-1,vrep.simx_opmode_streaming)
-     
+     [returnCode,angulo]=vrep.simxGetObjectOrientation(clientID,carro,-1,vrep.simx_opmode_streaming)
      %Posições cartesianas
      vel = 0;
-     for i=1:150 %tempo de movimentação
+     for i=1:250 %tempo de movimentação
          %Incremento da velocidade 
          [returnCode]=vrep.simxSetJointTargetVelocity(clientID,left_Motor,vel,vrep.simx_opmode_blocking);
          [returnCode]=vrep.simxSetJointTargetVelocity(clientID,right_Motor,vel,vrep.simx_opmode_blocking);
@@ -33,12 +33,14 @@ clientID=vrep.simxStart('127.0.0.1',19999,true,true,5000,5);
          %Pega a distância pelo sensor
          [returnCode,detectionState,detectedPoint,~,~]=vrep.simxReadProximitySensor(clientID,front_Sensor,vrep.simx_opmode_buffer); %demais chamadas
          %disp(norm(position));
+         %pega o angulo do robô 
+         [returnCode,angulo]=vrep.simxGetObjectOrientation(clientID,carro,-1,vrep.simx_opmode_buffer)
          
          %Salvar valores de x,y,z e teta nas variaveis
          x(i) = position(1); 
          y(i) = position(2);
          z(i) = position(3);
-         
+         teta(i) = angulo(3);
          
          k = norm(detectedPoint);
          if k<0.1 
