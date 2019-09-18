@@ -23,6 +23,10 @@ clientID=vrep.simxStart('127.0.0.1',19999,true,true,5000,5);
      [returnCode,angulo]=vrep.simxGetObjectOrientation(clientID,carro,-1,vrep.simx_opmode_streaming)
      %Posições cartesianas
      vel = 0;
+     xa = 0:0.01:2;
+     ya = 0:0.01:2;
+     za = 0.5;
+     pin = [xa ya za];
      for i=1:250 %tempo de movimentação
          %Incremento da velocidade 
          [returnCode]=vrep.simxSetJointTargetVelocity(clientID,left_Motor,vel,vrep.simx_opmode_blocking);
