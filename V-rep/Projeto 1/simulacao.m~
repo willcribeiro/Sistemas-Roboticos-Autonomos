@@ -29,8 +29,8 @@ clientID=vrep.simxStart('127.0.0.1',19999,true,true,5000,5);
       
      %Polinomio interpolador
      [X, Y, Theta, a, b, Mat] = poli_cubic([-2,-2,0],[2,2,45],0.01);
-     k_theta = 0.6;
-     k_l = 0.1;
+     k_theta = 1;
+     k_l = 0.9;
      v = 0.5;
      rd = 0.06;
      re = 0.06;
@@ -64,10 +64,7 @@ clientID=vrep.simxStart('127.0.0.1',19999,true,true,5000,5);
          theta_posicao_robo = atan2(position(2),position(1)); %angulo de posicao do robo
          theta_ref = atan2(ponto_curva(2),ponto_curva(1)); %angulo da curva que está mais próxima ao robo
          
-         if(theta_ref>theta_posicao_robo) %Sinal do delta L
-             Delta_l = -Delta_l;
-         end
-         
+         if(theta_ref>the
          %Controle
          u = -(k_theta*Delta_theta + (k_l*Delta_l*v*sin(Delta_theta)/Delta_theta));
          
