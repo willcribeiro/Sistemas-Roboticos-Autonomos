@@ -1,5 +1,8 @@
 clc
 clear
+
+format short; % 4 casas decimais em um número flutuante
+
 %Configuração inicial de comunicacao
 vrep=remApi('remoteApi')
 vrep.simxFinish(-1);
@@ -26,12 +29,12 @@ clientID=vrep.simxStart('127.0.0.1',19999,true,true,5000,5);
       
      %Polinomio interpolador
      [X, Y, Theta, a, b, Mat] = poli_cubic([-2,-2,0],[2,2,45],0.01);
-     
-     k_theta = 2;
-     k_l = 2;
-     v = 2;
-     rd =0.06;
+     k_theta = 1;
+     k_l = 0.9;
+     v = 0.5;
+     rd = 0.06;
      re = 0.06;
+     B = 0.13;
      while true %tempo de movimentação
          
          %Parametro para pegar a posicao e orientacao
@@ -43,19 +46,19 @@ clientID=vrep.simxStart('127.0.0.1',19999,true,true,5000,5);
                           
          %calculo da menor distância do robô a curva
          [ponto_curva, Delta_l, lambda] = distance2curve(Mat(:,1:2),[position(1),position(2)],'linear');
-         
-         Theta_robo = angulo_robo(3) + pi/2;
+
+         Theta_robo = angulo_robo(3) + pi/2;                                % 1 -> 47:   OK
 
          %raio de giro
-         dx = a(1) +2*a(2)*lambda + 3*a(3)*(lambda^2);
-         dy = b(1) + 2*b(2)*lambda + 3*b(3)*(lambda^2);
-         d2x = 2*a(2) + 6*a(3)*lambda;
-         d2y = 2*b(2) + 6*b(2)*lambda;
-         r = (((dx^2)+(dy^2))^1.5)/((d2y*dx)-(d2x*dy));
+         dx = a(2) +2*a(3)*lambda + 3*a(4)*(lambda^2);
+         dy = b(2) + 2*b(3)*lambda + 3*b(4)*(lambda^2);
+         d2x = 2*a(3) + 6*a(4)*lambda;
+         d2y = 2*b(3) + 6*b(4)*lambda;
+         r = ((((dx^2)+(dy^2))^1.5)/((d2y*dx)-(d2x*dy)));               %ABS?????
          k = (1/r);
          
          %delta theta
-         theta_SF = atan((a(1) + a(2)*(lambda) + a(3)*(lambda^2))/(b(1) + b(2)*(lambda) + b(3)*(lambda^2)))*180/pi;
+         theta_SF = atan((b(2) + 2*b(3)*(lambda) + 3*b(4)*(lambda^2))/(a(2) + 2*a(3)*(lambda) + 3*a(4)*(lambda^2)));%*180/pi;
          Delta_theta = Theta_robo - theta_SF;
          
          %Controle
@@ -65,8 +68,8 @@ clientID=vrep.simxStart('127.0.0.1',19999,true,true,5000,5);
          w = u + ((k*v*cos(Delta_theta))/(1-(k*Delta_l)));
          
          %Velocidade das juntas
-         wd = (v/rd) + (b/(2*rd))*w;
-         we = (v/re) - (b/(2*re))*w;
+         wd = (v/rd) + (B/(2*rd))*w;
+         we = (v/re) - (B/(2*re))*w;
          
          vrep.simxSetJointTargetVelocity(clientID,left_Motor,we,vrep.simx_opmode_blocking);
          vrep.simxSetJointTargetVelocity(clientID,right_Motor,wd,vrep.simx_opmode_blocking);
