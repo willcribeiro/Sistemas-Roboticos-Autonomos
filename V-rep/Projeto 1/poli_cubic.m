@@ -1,4 +1,4 @@
-function [X, Y, Theta, a, b] = poli_cubic(qi,qf,p)
+function [X, Y, Theta, a, b, Mat] = poli_cubic(qi,qf,p)
     dx = qf(1) - qi(1);
     dy = qf(2) - qi(2);
     theta_i = (qi(3)*pi)/180;
