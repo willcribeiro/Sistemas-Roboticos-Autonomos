@@ -22,7 +22,7 @@ clientID=vrep.simxStart('127.0.0.1',19999,true,true,5000,5);
      
      %Posicao e orientacao do robo
      [returnCode,position]=vrep.simxGetObjectPosition(clientID,carro,-1,vrep.simx_opmode_streaming)
-     [returnCode,angulo_robo]=vrep.simxGetObjectOrientation(clientID,carro,-1,vrep.simx_opmode_streaming)
+     [returnCode,angulo]=vrep.simxGetObjectOrientation(clientID,carro,-1,vrep.simx_opmode_streaming)
       
      %Polinomio interpolador
      [X, Y, Theta, a, b] = poli_cubic([-2,-2,0],[2,2,45],0.01);
@@ -31,7 +31,7 @@ clientID=vrep.simxStart('127.0.0.1',19999,true,true,5000,5);
          
          %Parametro para pegar a posicao e orientacao
          [returnCode,position]=vrep.simxGetObjectPosition(clientID,carro,-1,vrep.simx_opmode_buffer); %(Retorna X,Y,Z)
-         [returnCode,angulo_robo]=vrep.simxGetObjectOrientation(clientID,carro,-1,vrep.simx_opmode_buffer)
+         [returnCode,angulo]=vrep.simxGetObjectOrientation(clientID,carro,-1,vrep.simx_opmode_buffer)
 
          %Pega a distância pelo sensor
          %[returnCode,detectionState,detectedPoint,~,~]=vrep.simxReadProximitySensor(clientID,front_Sensor,vrep.simx_opmode_buffer); 
@@ -41,7 +41,7 @@ clientID=vrep.simxStart('127.0.0.1',19999,true,true,5000,5);
          x(i) = position(1); 
          y(i) = position(2);
          z(i) = position(3);
-         Theta_robo(i) = angulo_robo(3);
+         teta(i) = angulo(3);
          
          %raio de giro
          dx = a(1) +2*a(2)*lambda + 3*a(3)*(lambda^2);
@@ -52,12 +52,7 @@ clientID=vrep.simxStart('127.0.0.1',19999,true,true,5000,5);
          k = (1/r);
          
          %delta theta
-         theta_SF = Theta;
-         Delta_theta = angulo_robo - theta_SF;
-         
-         %Controle
-         u = -(k_theta*Delta_theta + (k_l*Delta_l*v*sin(Delta_theta)/Delta_theta));
-         
+         theta_SF = 
          
      end
      
