@@ -26,8 +26,8 @@ clientID=vrep.simxStart('127.0.0.1',19999,true,true,5000,5);
      [returnCode,angulo_robo]=vrep.simxGetObjectOrientation(clientID,carro,-1,vrep.simx_opmode_streaming)
       
      %PONTOS FINAIS
-     xf = 2.0;
-     yf = 2.0;
+     xf = -1.8;
+     yf = -1.7;
      
      %Ganhos do controlador
      k_theta = 0.6;
@@ -38,32 +38,38 @@ clientID=vrep.simxStart('127.0.0.1',19999,true,true,5000,5);
      re = 0.06;
      B = 0.13;
      
+     cont = 0 % contador para testes
+     
      while true %tempo de movimentação
      %Get position of Robot
      [returnCode,position]=vrep.simxGetObjectPosition(clientID,carro,-1,vrep.simx_opmode_buffer); %(Retorna X,Y,Z)
      [returnCode,angulo_robo]=vrep.simxGetObjectOrientation(clientID,carro,-1,vrep.simx_opmode_buffer);
-     Theta_Robo = angulo_robo(3);
      
-     if(Theta_Robo < 0)
-         Theta_Robo = Theta_Robo + 2*pi;
-     end
+     [returnCode,~,~,angulo_robo_euler,~]=vrep.simxGetObjectGroupData(clientID,carro,5,vrep.simx_opmode_buffer);
+     Theta_Robo = angulo_robo(3) + pi/2;
      
+%      if(Theta_Robo < 0)
+%          Theta_Robo = Theta_Robo + pi/2;
+%      end
+          
      %Calculo dos Delta x e y 
      delta_x = xf - position(1);
      delta_y = yf - position(2);
-     
+         
      %Calculo do Theta estrela/Referencial
      Theta_ref = atan2(delta_y,delta_x);     
-     if(Theta_ref < 0)
-         Theta_ref = Theta_ref + 2*pi;
-     end
+     
+%      if(Theta_ref < 0)
+%         Theta_ref = Theta_ref + pi/2;
+%      end
      
      %Calculo do delta l do referencial e  delta Theta
      delta_l_ref = sqrt((delta_x)^2 + (delta_y)^2);     
-     delta_theta = Theta_ref - Theta_Robo
+     delta_theta = Theta_ref - Theta_Robo;
      
      %Caluclo do delta L
-     delta_l = delta_l_ref*cos(abs(delta_theta))
+     delta_l = delta_l_ref*cos(delta_theta);%cos(abs(delta_theta));%
+     
      %Calculo da velocidade linear e angular
      v = k_l*delta_l;
      w = k_theta * delta_theta;
