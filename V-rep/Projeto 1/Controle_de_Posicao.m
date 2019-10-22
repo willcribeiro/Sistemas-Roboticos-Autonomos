@@ -26,8 +26,8 @@ clientID=vrep.simxStart('127.0.0.1',19999,true,true,5000,5);
      [returnCode,angulo_robo]=vrep.simxGetObjectOrientation(clientID,carro,-1,vrep.simx_opmode_streaming)
       
      %PONTOS FINAIS
-     xf = -1.8;
-     yf = -1.7;
+     xf = -1;
+     yf = -1;
      
      %Ganhos do controlador
      k_theta = 0.6;
