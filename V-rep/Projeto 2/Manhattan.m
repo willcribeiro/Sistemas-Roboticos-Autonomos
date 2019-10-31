@@ -15,6 +15,28 @@ grid on;
 hold on;
 n=0;%Number of Obstacles
 
+for i = 1:10
+    MAP(i,1)=-1;
+    a = floor(i);
+    b = floor(1);
+    plot(a+.5,b+.5,'rx');
+    MAP(i,10)=-1;
+    a = floor(i);
+    b = floor(10);
+    plot(a+.5,b+.5,'rx');
+end
+for i = 1:10
+    MAP(1,i)=-1;
+    a = floor(1);
+    b = floor(i);
+    plot(a+.5,b+0.5,'rx')
+    MAP(10,i)=-1;
+    a = floor(10);
+    b = floor(i);
+    plot(a+.5,b+0.5,'rx')
+    
+end
+
 % --------Iniciaizacao de conf de alvo---------------------
 pause(1);
 h=msgbox('Selecione o alvo com o botão esquerdo');
@@ -70,27 +92,26 @@ while (but ~= 1) %Repeat until the Left button is not clicked
 end
 xStart=xval;%Starting Position
 yStart=yval;%Starting Position
-MAP(xval,yval)=1000;
+MAP(xval,yval)=0;
  plot(xval+.5,yval+.5,'bo');
+
+
 %--------------------------------------------------------------
 %---------------------------START ALGORITHM--------------------
-for i = 1:10
-    MAP(i,1)=-1;
-    MAP(i,10)=-1;
-end
-for i = 1:10
-    MAP(1,i)=-1;
-    MAP(10,i)=-1;
-end
+
 xcord = xTarget;
 ycord = yTarget;
 potencial =1;
 
-estrutura = [xcord, ycord, potencial, 0]
+estrutura = [xcord, ycord, potencial]
 pilha = CQueue()
 pilha.push(estrutura);
 cont = 0;
-while((xcord ~= xStart) && (ycord ~=yStart)) 
+while ((xcord ~= xStart) || (ycord ~=yStart))
+    if(pilha.size() == 0)
+        disp('Caminho nao possivel')
+        break
+    end
     aux = pilha.pop();
     xcord = aux(1);
     ycord = aux(2);
@@ -100,25 +121,47 @@ while((xcord ~= xStart) && (ycord ~=yStart))
          end
         
         if(MAP(xcord+1,ycord) ==0 )
-            estrutura = [aux(1)+1, aux(2), aux(3)+1, potencial];
+            estrutura = [aux(1)+1, aux(2), aux(3)+1];
             pilha.push(estrutura);
            
         end
         if(MAP(xcord-1,ycord) == 0 )
-            estrutura = [aux(1)-1, aux(2), aux(3)+1, potencial];
+            estrutura = [aux(1)-1, aux(2), aux(3)+1];
             pilha.push(estrutura);
         
         end
          if(MAP(xcord,ycord+1) == 0 )
-            estrutura = [aux(1), aux(2)+1, aux(3)+1, potencial];
+            estrutura = [aux(1), aux(2)+1, aux(3)+1];
             pilha.push(estrutura);
             
          end
          if(MAP(xcord,ycord-1) == 0 )
-            estrutura = [aux(1), aux(2)-1, aux(3)+1, potencial];
+            estrutura = [aux(1), aux(2)-1, aux(3)+1];
             pilha.push(estrutura);
             
          end    
     end
         
 end
+pilha.remove()
+
+while MAP(xcord,ycord) ~= 1
+   
+   if((MAP(xcord,ycord) > MAP(xcord +1,ycord)) && (MAP(xcord+1,ycord) > 0)) 
+       xcord = xcord + 1;
+       plot(xcord+.5,ycord+.5,'gx'); 
+       
+   elseif((MAP(xcord,ycord) > MAP(xcord -1,ycord)) && (MAP(xcord-1,ycord) > 0))
+       xcord = xcord - 1;
+       plot(xcord+.5,ycord+.5,'gx'); 
+   
+   elseif((MAP(xcord,ycord) > MAP(xcord,ycord+1)) && (MAP(xcord,ycord+1) > 0))
+       ycord = ycord + 1;
+       plot(xcord+.5,ycord+.5,'gx'); 
+   elseif((MAP(xcord,ycord) > MAP(xcord,ycord-1)) && (MAP(xcord,ycord-1) > 0))
+       ycord = ycord - 1;
+       plot(xcord+.5,ycord+.5,'gx'); 
+   end
+        
+end
+

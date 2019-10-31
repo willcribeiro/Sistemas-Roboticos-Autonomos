@@ -19,21 +19,21 @@ classdef CQueue < handle
 %   
 % See also CList, CStack
 %
-% ¶¨ÒåÁËÒ»¸ö¶ÓÁÐ
-% q = CQueue; ¶¨ÒåÒ»¸ö¿ÕµÄ¶ÓÁÐ¶ÔÏó
-% q = CQueue(c); ¶¨Òå¶ÓÁÐ¶ÔÏó£¬²¢ÓÃc³õÊ¼»¯q£¬µ±cÎªcellÊ±£¬cµÄÔªËØÎªÕ»µÄÊý¾Ý£¬
-%    ·ñÔòc±¾ÉíÎªÕ»µÄµÚÒ»¸öÊý¾Ý
+% ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+% q = CQueue; ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ÕµÄ¶ï¿½ï¿½Ð¶ï¿½ï¿½ï¿½
+% q = CQueue(c); ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½ó£¬²ï¿½ï¿½ï¿½cï¿½ï¿½Ê¼ï¿½ï¿½qï¿½ï¿½ï¿½ï¿½cÎªcellÊ±ï¿½ï¿½cï¿½ï¿½Ôªï¿½ï¿½ÎªÕ»ï¿½ï¿½ï¿½ï¿½Ý£ï¿½
+%    ï¿½ï¿½ï¿½ï¿½cï¿½ï¿½ï¿½ï¿½ÎªÕ»ï¿½Äµï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½
 %
-% Ö§³Ö²Ù×÷£º
-%     sz = q.size() ·µ»Ø¶ÓÁÐÄÚÔªËØ¸öÊý£¬Ò²¿ÉÓÃÀ´ÅÐ¶Ï¶ÓÁÐÊÇ·ñ·Ç¿Õ¡£
-%     q.isempty() ÓÃÀ´ÅÐ¶Ï¶ÓÁÐÎª¿Õ
-%     q.empty() Çå¿Õ¶ÓÁÐ
-%     q.push(el) ½«ÐÂÔªËØelÑ¹Èë¶ÓÁÐÄÚ
-%     s.pop()  µ¯³ö¶ÓÊ×ÔªËØ£¬ÓÃ»§Ðè×Ô¼ºÈ·±£¶ÓÁÐ·Ç¿Õ
-%     el = q.front() ·µ»Ø¶ÓÊ×ÔªËØ£¬ÓÃ»§Ðè×Ô¼ºÈ·±£¶ÓÁÐ·Ç¿Õ
-%     el = q.back() ·µ»Ø¶ÓÎ²ÔªËØ£¬ÓÃ»§Ðè×Ô¼ºÈ·±£¶ÓÁÐ·Ç¿Õ
-%     q.remove() Çå¿Õ¶ÓÁÐ
-%     q.content() °´Ë³Ðò·µ»ØqµÄÊý¾Ý£¬ÎªÒ»¸öcellÊý×é
+% Ö§ï¿½Ö²ï¿½ï¿½ï¿½ï¿½ï¿½
+%     sz = q.size() ï¿½ï¿½ï¿½Ø¶ï¿½ï¿½ï¿½ï¿½ï¿½Ôªï¿½Ø¸ï¿½ï¿½ï¿½Ò²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶Ï¶ï¿½ï¿½ï¿½ï¿½Ç·ï¿½Ç¿Õ¡ï¿½
+%     q.isempty() ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶Ï¶ï¿½ï¿½ï¿½Îªï¿½ï¿½
+%     q.empty() ï¿½ï¿½Õ¶ï¿½ï¿½ï¿½
+%     q.push(el) ï¿½ï¿½ï¿½ï¿½Ôªï¿½ï¿½elÑ¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+%     s.pop()  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ôªï¿½Ø£ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½Ô¼ï¿½È·ï¿½ï¿½ï¿½ï¿½ï¿½Ð·Ç¿ï¿½
+%     el = q.front() ï¿½ï¿½ï¿½Ø¶ï¿½ï¿½ï¿½Ôªï¿½Ø£ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½Ô¼ï¿½È·ï¿½ï¿½ï¿½ï¿½ï¿½Ð·Ç¿ï¿½
+%     el = q.back() ï¿½ï¿½ï¿½Ø¶ï¿½Î²Ôªï¿½Ø£ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½Ô¼ï¿½È·ï¿½ï¿½ï¿½ï¿½ï¿½Ð·Ç¿ï¿½
+%     q.remove() ï¿½ï¿½Õ¶ï¿½ï¿½ï¿½
+%     q.content() ï¿½ï¿½Ë³ï¿½ò·µ»ï¿½qï¿½ï¿½ï¿½ï¿½Ý£ï¿½ÎªÒ»ï¿½ï¿½cellï¿½ï¿½ï¿½ï¿½
 %     
 % See also CStack, CList
 %
@@ -48,31 +48,31 @@ classdef CQueue < handle
     end
     
     properties (Access = public)
-        capacity    % Õ»µÄÈÝÁ¿£¬µ±ÈÝÁ¿²»¹»Ê±£¬ÈÝÁ¿À©³äÎª2±¶¡£
+        capacity    % Õ»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îª2ï¿½ï¿½ï¿½ï¿½
     end
     
     methods
-        function obj = CQueue(c) % ³õÊ¼»¯
+        function obj = CQueue(c) % ï¿½ï¿½Ê¼ï¿½ï¿½
             if nargin >= 1 && iscell(c)
                 obj.buffer = [c(:); cell(numel(c), 1)];
                 obj.beg = 1;
                 obj.rear = numel(c) + 1;
                 obj.capacity = 2*numel(c);
             elseif nargin >= 1
-                obj.buffer = cell(100, 1);
+                obj.buffer = cell(9000, 1);
                 obj.buffer{1} = c;
                 obj.beg = 1;
                 obj.rear = 2;
-                obj.capacity = 100;                
+                obj.capacity = 9000;                
             else
-                obj.buffer = cell(100, 1);
-                obj.capacity = 100;
+                obj.buffer = cell(9000, 1);
+                obj.capacity = 9000;
                 obj.beg = 1;
                 obj.rear = 1;
             end
         end
         
-        function s = size(obj) % ¶ÓÁÐ³¤¶È
+        function s = size(obj) % ï¿½ï¿½ï¿½Ð³ï¿½ï¿½ï¿½
             if obj.rear >= obj.beg
                 s = obj.rear - obj.beg;
             else
@@ -90,7 +90,7 @@ classdef CQueue < handle
             obj.rear = 1;
         end
         
-        function push(obj, el) % Ñ¹ÈëÐÂÔªËØµ½¶ÓÎ²
+        function push(obj, el) % Ñ¹ï¿½ï¿½ï¿½ï¿½Ôªï¿½Øµï¿½ï¿½ï¿½Î²
             if obj.size >= obj.capacity - 1
                 sz = obj.size();
                 if obj.rear >= obj.front
@@ -107,7 +107,7 @@ classdef CQueue < handle
             obj.rear = mod(obj.rear, obj.capacity) + 1;
         end
         
-        function el = front(obj) % ·µ»Ø¶ÓÊ×ÔªËØ
+        function el = front(obj) % ï¿½ï¿½ï¿½Ø¶ï¿½ï¿½ï¿½Ôªï¿½ï¿½
             if obj.rear ~= obj.beg
                 el = obj.buffer{obj.beg};
             else
@@ -116,7 +116,7 @@ classdef CQueue < handle
             end
         end
         
-        function el = back(obj) % ·µ»Ø¶ÓÎ²ÔªËØ            
+        function el = back(obj) % ï¿½ï¿½ï¿½Ø¶ï¿½Î²Ôªï¿½ï¿½            
             
            if obj.rear == obj.beg
                el = [];
@@ -131,7 +131,7 @@ classdef CQueue < handle
             
         end
         
-        function el = pop(obj) % µ¯³ö¶ÓÊ×ÔªËØ
+        function el = pop(obj) % ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ôªï¿½ï¿½
             if obj.rear == obj.beg
                 error('CQueue:NO_Data', 'Trying to pop an empty queue');
             else
@@ -141,12 +141,12 @@ classdef CQueue < handle
             end             
         end
         
-        function remove(obj) % Çå¿Õ¶ÓÁÐ
+        function remove(obj) % ï¿½ï¿½Õ¶ï¿½ï¿½ï¿½
             obj.beg = 1;
             obj.rear = 1;
         end
         
-        function display(obj) % ÏÔÊ¾¶ÓÁÐ
+        function display(obj) % ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½
             if obj.size()
                 if obj.beg <= obj.rear 
                     for i = obj.beg : obj.rear-1
@@ -168,7 +168,7 @@ classdef CQueue < handle
             end
         end
         
-        function c = content(obj) % È¡³ö¶ÓÁÐÔªËØ
+        function c = content(obj) % È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ôªï¿½ï¿½
             if obj.rear >= obj.beg
                 c = obj.buffer(obj.beg:obj.rear-1);                    
             else
