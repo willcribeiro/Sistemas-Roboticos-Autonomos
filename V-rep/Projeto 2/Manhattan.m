@@ -104,15 +104,16 @@ ycord = yTarget;
 potencial =1;
 
 estrutura = [xcord, ycord, potencial]
-pilha = CQueue()
-pilha.push(estrutura);
+fila = CQueue();%criar fila
+pilha = CQueue();%criar pilha
+fila.push(estrutura);
 cont = 0;
 while ((xcord ~= xStart) || (ycord ~=yStart))
-    if(pilha.size() == 0)
+    if(fila.size() == 0)
         disp('Caminho nao possivel')
         break
     end
-    aux = pilha.pop();
+    aux = fila.pop();
     xcord = aux(1);
     ycord = aux(2);
     if(MAP(xcord,ycord) ~= -1)
@@ -122,44 +123,52 @@ while ((xcord ~= xStart) || (ycord ~=yStart))
         
         if(MAP(xcord+1,ycord) ==0 )
             estrutura = [aux(1)+1, aux(2), aux(3)+1];
-            pilha.push(estrutura);
+            fila.push(estrutura);
            
         end
         if(MAP(xcord-1,ycord) == 0 )
             estrutura = [aux(1)-1, aux(2), aux(3)+1];
-            pilha.push(estrutura);
+            fila.push(estrutura);
         
         end
          if(MAP(xcord,ycord+1) == 0 )
             estrutura = [aux(1), aux(2)+1, aux(3)+1];
-            pilha.push(estrutura);
+            fila.push(estrutura);
             
          end
          if(MAP(xcord,ycord-1) == 0 )
             estrutura = [aux(1), aux(2)-1, aux(3)+1];
-            pilha.push(estrutura);
+            fila.push(estrutura);
             
          end    
     end
         
 end
-pilha.remove()
+fila.remove()
 
 while MAP(xcord,ycord) ~= 1
    
    if((MAP(xcord,ycord) > MAP(xcord +1,ycord)) && (MAP(xcord+1,ycord) > 0)) 
+       estrut = [xcord, ycord];
+       pilha.push(estrut);
        xcord = xcord + 1;
        plot(xcord+.5,ycord+.5,'gx'); 
        
    elseif((MAP(xcord,ycord) > MAP(xcord -1,ycord)) && (MAP(xcord-1,ycord) > 0))
+       estrut = [xcord, ycord];
+       pilha.push(estrut);
        xcord = xcord - 1;
        plot(xcord+.5,ycord+.5,'gx'); 
    
    elseif((MAP(xcord,ycord) > MAP(xcord,ycord+1)) && (MAP(xcord,ycord+1) > 0))
+       estrut = [xcord, ycord];
+       pilha.push(estrut);
        ycord = ycord + 1;
        plot(xcord+.5,ycord+.5,'gx'); 
    elseif((MAP(xcord,ycord) > MAP(xcord,ycord-1)) && (MAP(xcord,ycord-1) > 0))
-       ycord = ycord - 1;
+       estrut = [xcord, ycord];
+       pilha.push(estrut);
+       ycord = ycord - 1;      
        plot(xcord+.5,ycord+.5,'gx'); 
    end
         
