@@ -1,0 +1,22 @@
+clear
+clc
+
+numNodes = 50;
+i = 1;
+O = obstaculos();
+n = 1;
+while i < numNodes+1
+a = 0;
+b = 4.5;
+x(i) = (b-a).*rand(1,1) + a;
+y(i) = (b-a).*rand(1,1) + a;
+
+
+point = PointIsIn(O, n, x(i),y(i));
+
+if point == 0
+   hold on, plot(x(i),y(i), 'o')
+   i = i+1;
+end
+
+end

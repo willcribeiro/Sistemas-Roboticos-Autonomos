@@ -20,7 +20,7 @@ clientID=vrep.simxStart('127.0.0.1',19999,true,true,5000,5);
      
      for i=1:50
          [returnCode,detectionState,detectedPoint,~,~]=vrep.simxReadProximitySensor(clientID,front_Sensor,vrep.simx_opmode_buffer); %demais chamadas
-         disp(norm(detectedPoint));
+         disp(detectedPoint);
          pause(0.1);
      end
      

@@ -1,0 +1,257 @@
+%function Amostragem(map, nos);
+
+clear
+clc
+
+numNodes = 70; %numeros totais de nos
+nodes.px = [];
+nodes.py = [];
+i=1;
+r = [];
+n = 3; %quantidade de obstaculos
+
+roomWidth = 1;
+roomLength = 1;
+AdjacencyMatrix = zeros(roomWidth + 2, roomLength + 2);
+
+%Pega o mapa de obstaculos
+M = [];
+N = [];
+O = [];
+[M N O] = obstaculos();
+map = [M, N, O];
+
+%Vetores pra guardar os pontos
+X_Coordenadas = zeros(numNodes + 2);
+Y_Coordenadas = zeros(numNodes + 2);
+
+Nx = [];
+Ny = [];
+No = [Nx; Ny];
+ 
+inicio = [0.91479, 0.47715]; %coordenadas iniciais (x,y)
+final = [0.775, 2.875]; %coordenadas finais (x,y)
+
+%Guardar os pontos iniciais no vetor
+X_Coordenadas(1) = inicio(1);
+Y_Coordenadas(1) = inicio(2);
+ 
+Nx(i, :) = [inicio(1)];
+Ny(i, :) = [inicio(2)];
+
+%Guardar os pontos finais no vetor
+X_Coordenadas(numNodes) = final(1);
+Y_Coordenadas(numNodes) = final(2);
+
+Nx(numNodes, :) = [final(1)];
+Ny(numNodes, :) = [final(2)];
+
+i= i+1;
+while(i < numNodes)
+    %Gerar nós aleatórios nos limites [0, 4.5]
+      a = 0.5;
+      b = 3.5;
+      % r = (b-a).*rand(1000,1) + a;
+      nodes(i).px = (b-a).*rand(1,1) + a;
+      nodes(i).py = (b-a).*rand(1,1) + a;  
+     
+      %Ver se o nó gerado esta dentro do obstaculo
+    if PointIsIn(map, n, nodes(i).px, nodes(i).py) == 0
+        %Guarda os nós em vetores auxiliares
+        X_Coordenadas(i) = nodes(i).px; 
+        Y_Coordenadas(i) = nodes(i).py;
+        Nx(i, :) = [nodes(i).px];
+        Ny(i, :) = [nodes(i).py];
+  
+        xlim([0.25 4])
+        ylim([0.25 3.5])
+        hold on, plot(Nx(i,:), Ny(i,:), 'ro')
+        
+        i = i+1;
+    end
+end
+
+for q = 1:numNodes + 2
+
+    p = randi(numNodes, 1); %Pega um nó aleatorio
+
+    c = [X_Coordenadas(p), Y_Coordenadas(p)]; %Acha as coordenadas desse nó
+    
+    for j = 1:numNodes + 2 %checa todos os nós existentes
+
+        if(j ~= p)
+           y1 = c(2);
+           y2 = Y_Coordenadas(j);
+           x1 = c(1);
+           x2 = X_Coordenadas(j);
+           d = sqrt((y2-y1)^2 + (x2-x1)^2); %distancia entre os nós
+           
+              if d <= 0.9 && d >= 0.5             
+                  if (x1 == x2)
+                       limites = [y1 y2];
+                       y = min(limites):0.01:max(limites);
+                       x = ones([1, length(y)])*x1;
+                  elseif(x1 < x2)
+                       coe = polyfit([x1, x2],[y1, y2],1);
+                       x = x1:0.01:x2;
+                       y = polyval(coe,x);
+                  else
+                       coe = polyfit([x1, x2],[y1, y2],1);
+                       x = x2:0.01:x1;
+                       y = polyval(coe,x);
+                  end         
+                        
+                  bool = true;
+                 for index = 1:n*2 
+                     if mod(index,2) ~= 0
+                        [in,~] = inpolygon(x, y, map(:,index), map(:,index+1));
+                         in = sort(in, 'descend');
+                         if find(in == 1)
+                            bool = false;
+                         end
+                     end
+                  end
+                  if(bool == true)
+                     AdjacencyMatrix(p, j) = 1;
+                     AdjacencyMatrix(j, p) = 1;
+                        
+                     hold on, plot(x,y,'k');
+                  end
+                  
+              end
+        end
+    end
+
+end
+
+xlim([0.25 4])
+ylim([0.25 3.5])
+hold on, plot(inicio(1), inicio(2), 'bo')
+
+xlim([0.25 4])
+ylim([0.25 3.5])
+hold on, plot(final(1), final(2), 'bo')
+
+% Start Node
+%     visited = [];
+%     open = [];
+%     openIndex = 1;
+%     visitedIndex = 1;
+%     
+%     visited(visitedIndex, :) = [1, 1]; % Start Node
+%     
+%     [rows, cols] = size(AdjacencyMatrix);
+%     
+%     % Fill First Neighbors
+%     for col = 1:cols
+%         if AdjacencyMatrix(1,col) == 1
+%             open(openIndex, :) = [1, col];
+%             openIndex = openIndex + 1;
+%         end
+%     end
+%     
+%     
+%     
+%     while isempty(open) == 0
+%         
+%        current = open(1, :); % First element
+%        openIndex = openIndex - 1;
+%        open(1, :) = []; % remove the first element
+%        
+%        visitedIndex = visitedIndex + 1;
+%        visited(visitedIndex, :) = current;
+%        
+%        for col = current(1)+1:cols
+%            if AdjacencyMatrix(current(2), col) == 1
+%                 open(openIndex, :) = [current(2), col];
+%                 openIndex = openIndex + 1;
+%             end
+%        end
+%         
+%     end
+% 
+%     %disp(visited);
+%     %disp(open);
+%     
+%     
+%     
+%     for i = 1:visitedIndex
+%         
+%        
+%         xval = Nx(visited(i,1));
+%         yval = Ny(visited(i,1));
+%         xval2 = Nx(visited(i,2));
+%         yval2 = Ny(visited(i,2));
+%        if (xval == xval2)
+%                   limites = [yval yval2];
+%                   y_path = min(limites):0.01:max(limites);
+%                   x_path = ones([1, length(y_path)])*xval;
+%                   elseif(xval < xval2)
+%                        coe = polyfit([xval, xval2],[yval, yval2],1);
+%                        x_path = xval:0.01:xval2;
+%                        y_path = polyval(coe,x_path);
+%                   else
+%                        coe = polyfit([xval, xval2],[yval, yval2],1);
+%                        x_path = xval2:0.01:xval;
+%                        y_path = polyval(coe,x_path);
+%                   end   
+%         
+%         hold on, plot(x_path, y_path, 'rx' );
+%         
+%  end
+
+No = [Nx, Ny];
+
+edges=cell(numNodes+2,1);
+for i=1:numNodes
+    for j=i+1:numNodes
+        if checkPath(No(i,:),No(j,:),map);
+            edges{i}=[edges{i};j];edges{j}=[edges{j};i];
+            if display, line([No(i,1);No(j,1)],[No(i,2);No(j,2)]); end
+        end
+    end
+end
+
+Q=[1 0 heuristic(Nx(1,:),final) 0+heuristic(Nx(1,:),final) -1]; % the processing queue of A* algorihtm, open list
+closed=[]; % the closed list taken as a list
+pathFound=false;
+tic;
+while size(Q,1)>0
+     [A, I]=min(Q,[],1);
+     m=Q(I(4),:); % smallest cost element to process
+     Q=[Q(1:I(4)-1,:);Q(I(4)+1:end,:)]; % delete element under processing
+     if m(1)==2 % final test
+         pathFound=true;break;
+     end
+     for mv=1:length(edges{m(1),1}) %iterate through all edges from the node
+         newVertex=edges{m(1),1}(mv);
+         if length(closed)==0 || length(find(closed(:,1)==m(1)))==0 % not already in closed
+             historicCost=m(2)+historic(Nx(m(1),:),Nx(newVertex,:));
+             heuristicCost=heuristic(Nx(newVertex,:),final);
+             totalCost=historicCost+heuristicCost;
+             add=true; % not already in queue with better cost
+             if length(find(Q(:,1)==m(1)))>=1
+                 I=find(Q(:,1)==newVertex);
+%                  if Q(I,1)==48 && n(1)==46 123, end
+                 if Q(I,4)<totalCost, add=false;
+                 else Q=[Q(1:I-1,:);Q(I+1:end,:);];add=true;
+                 end
+             end
+             if add
+                 Q=[Q;newVertex historicCost heuristicCost totalCost size(closed,1)+1]; % add new nodes in queue
+             end
+         end           
+     end
+     closed=[closed;m]; % update closed lists
+end
+
+path=[No(m(1),:)];
+prev=m(5);
+while prev>0
+    path=[vertex(closed(prev,1),:);path];
+    prev=closed(prev,5);
+end
+
+line(path(:,1),path(:,2),'color','r');
+path_in = path(:,1):0.01:path(:,2);
+%hold on, plot(pathin, 'gx')

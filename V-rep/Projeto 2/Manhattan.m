@@ -171,6 +171,43 @@ while MAP(xcord,ycord) ~= 1
        ycord = ycord - 1;      
        plot(xcord+.5,ycord+.5,'gx'); 
    end
-        
+          
 end
+inicial = pilha.pop();
+J = 1;
+K =1;
+while pilha.size() > 0
+    final = pilha.pop();
+    for ix = inicial(1):0.05:final(1)
+        Xaux(J) = ix;
+        J = J+1;
+    end
+     for iy = inicial(2):0.05:final(2)
+        Yaux(K) = iy;
+        K = K+1;
+    end
+    inicial = final;
+end
+tamanho_matriz_x = size(Xaux);
+tamanho_matriz_y = size(Yaux);
+
+Y = zeros(1,tamanho_matriz_x(2));
+
+
+if(tamanho_matriz_x(2) > tamanho_matriz_y(2))
+    X = Xaux;
+    Y = zeros(1,tamanho_matriz_x(2));
+    for i=1:size(Yaux)
+        Y(1,i) = Yaux(1,i);  
+    end
+    Z = ones(1,tamanho_matriz_x(2))*0.5;
+else
+    X = zeros(1,tamanho_matriz_y(2));
+    for i=1:size(Xaux)
+        X(1,i) = Xaux(1,i);  
+    end
+    Y = Yaux;
+    Z = ones(1,tamanho_matriz_y(2))*0.5;
+end
+MAT = [X' Y' Z'];
 

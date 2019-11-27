@@ -10,10 +10,10 @@ clientID=vrep.simxStart('127.0.0.1',19999,true,true,5000,5);
      disp('Conectado')
      %-------------------------------------------Handle-----------------------------------------------------------------------------
      
-     [returnCode,left_Motor]=vrep.simxGetObjectHandle(clientID,'wheel_left_joint',vrep.simx_opmode_blocking)
-     [returnCode,right_Motor]=vrep.simxGetObjectHandle(clientID,'wheel_right_joint',vrep.simx_opmode_blocking)
+     [returnCode,left_Motor]=vrep.simxGetObjectHandle(clientID,'LeftMotor',vrep.simx_opmode_blocking)
+     [returnCode,right_Motor]=vrep.simxGetObjectHandle(clientID,'RigthMotor',vrep.simx_opmode_blocking)
      %[returnCode,front_Sensor]=vrep.simxGetObjectHandle(clientID,'FrontUS',vrep.simx_opmode_blocking) %Primeira chamada
-     [returnCode,carro]= vrep.simxGetObjectHandle(clientID,'Turtlebot2',vrep.simx_opmode_blocking)
+     [returnCode,carro]= vrep.simxGetObjectHandle(clientID,'RobotBase',vrep.simx_opmode_blocking)
      %------------------------------------------Other Code----------------------------------------------------------------------------
      %Movimentacao
      [returnCode]=vrep.simxSetJointTargetVelocity(clientID,left_Motor,0,vrep.simx_opmode_blocking);
@@ -32,7 +32,7 @@ clientID=vrep.simxStart('127.0.0.1',19999,true,true,5000,5);
      
      i = 1;
      %Velocidade definida como constante
-     v = 0.5;
+     v = 0.9;
      rd = 0.06;
      re = 0.06;
      B = 0.13;     
