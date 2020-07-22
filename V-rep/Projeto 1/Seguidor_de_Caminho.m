@@ -4,7 +4,7 @@ clear
 format short; % 4 casas decimais em um número flutuante
 
 %Configuração inicial de comunicacao
-vrep=remApi('remoteApi')
+vrep=remApi('remoteApiWin')
 vrep.simxFinish(-1);
 
 clientID=vrep.simxStart('127.0.0.1',19999,true,true,5000,5);
